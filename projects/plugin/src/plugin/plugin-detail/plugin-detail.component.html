@@ -1,0 +1,111 @@
+<div class="anime-explorer">
+  <div class="search-row">
+    <ion-icon name="search-outline"></ion-icon>
+    <input
+      type="text"
+      placeholder="Search anime by title..."
+      [(ngModel)]="query"
+      (ngModelChange)="onQueryChange()"
+    />
+  </div>
+
+  <div class="filter-groups">
+    <div class="filter-group">
+      <span class="filter-label">Season</span>
+      <div class="chip-row">
+        <button
+          *ngFor="let season of seasons"
+          class="chip season-{{ season }}"
+          [class.active]="selectedSeason === season"
+          (click)="toggleSeason(season)"
+        >
+          {{ season | titlecase }}
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Year</span>
+      <div class="chip-row scrollable">
+        <button
+          *ngFor="let year of years"
+          class="chip"
+          [class.active]="selectedYear === year"
+          (click)="onYearChange(selectedYear === year ? null : year)"
+        >
+          {{ year }}
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Genre</span>
+      <div class="chip-row scrollable">
+        <button
+          *ngFor="let genre of genres"
+          class="chip"
+          [class.active]="selectedGenre === (genre.id + '')"
+          (click)="toggleGenre(genre.id)"
+        >
+          {{ genre.name }}
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Status</span>
+      <div class="chip-row">
+        <button
+          *ngFor="let status of statuses"
+          class="chip"
+          [class.active]="selectedStatus === status.value"
+          (click)="toggleStatus(status.value)"
+        >
+          {{ status.label }}
+        </button>
+      </div>
+    </div>
+
+    <button class="clear-link" *ngIf="query || selectedGenre || selectedSeason || selectedYear || selectedStatus" (click)="clearFilters()">
+      Clear all filters
+    </button>
+  </div>
+
+  <div class="state-message" *ngIf="loading && results.length === 0">
+    Searching...
+  </div>
+
+  <div class="state-message error" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <div class="state-message" *ngIf="!loading && hasSearched && results.length === 0 && !errorMessage">
+    No anime matched those filters. Try loosening a filter or adjusting your search.
+  </div>
+
+  <div class="state-message hint" *ngIf="!hasSearched">
+    Search a title, or pick a season, year, or genre below to start browsing.
+  </div>
+
+  <div class="results-grid">
+    <div class="anime-card" *ngFor="let anime of results; trackBy: trackByMalId">
+      <a [href]="anime.url" target="_blank" rel="noopener">
+        <img [src]="anime.imageUrl" [alt]="anime.title" loading="lazy" />
+      </a>
+      <div class="anime-card-body">
+        <div class="anime-title">{{ anime.title }}</div>
+        <div class="anime-meta">
+          <span class="score" *ngIf="anime.score">★ {{ anime.score }}</span>
+          <span class="year" *ngIf="anime.year">{{ anime.year }}</span>
+          <span class="episodes" *ngIf="anime.episodes">{{ anime.episodes }} ep</span>
+        </div>
+        <div class="anime-genres">
+          <span class="genre-tag" *ngFor="let g of anime.genres.slice(0, 3)">{{ g }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="load-more" *ngIf="hasNextPage && !loading" (click)="loadMore()">Load more</button>
+  <div class="state-message" *ngIf="loading && results.length > 0">Loading more...</div>
+</div>

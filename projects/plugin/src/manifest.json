@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../node_modules/@wako-app/mobile-sdk/dist/manifest-schema.json",
+  "version": "1.0.0",
+  "id": "plugin.anime-explorer",
+  "name": "Anime Explorer",
+  "description": "Search and organize anime by season, genre, and more, powered by MyAnimeList data.",
+  "author": "jason",
+  "actions": [],
+  "entryPointV2": "https://REPLACE_WITH_YOUR_GITHUB_USERNAME.github.io/wako-anime-explorer/plugin.js",
+  "entryPointV3": "/plugin.js",
+  "languages": {
+    "en": "/i18n/en.json"
+  },
+  "changeLogs": {
+    "1.0.0": "Initial version: search-first anime browser with season, genre, and year filters"
+  }
+}
